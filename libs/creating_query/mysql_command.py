@@ -9,7 +9,7 @@ class CreateCommand(object):
 
     @staticmethod
     def check_user(login, password):
-        command = "SELECT EXISTS(SELECT * FROM users WHERE login={} and password ={})".format(login, password)
+        command = "SELECT * FROM users WHERE login='{}' and password = '{}'".format(login, password)
         return command
 
 

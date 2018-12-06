@@ -26,12 +26,23 @@ class ClientMysql(object):
         except Exception as e:
             logging.error(msg="Error while connect to database, {}".format(e))
 
-    def request(self, command):
+    def request_insert(self, command):
         try:
             logging.info(msg="Try {command} to database".format(command=command))
             cursor = self.db.cursor()
             cursor.execute("{}".format(command))
             data = self.db.commit()
+            logging.info(msg="receive data - {} from database".format(data))
+            return data
+        except Exception as ex:
+            logging.error(msg="error - {}".format(ex))
+
+    def request_select(self, command):
+        try:
+            logging.info(msg="Try {command} to database".format(command=command))
+            cursor = self.db.cursor()
+            cursor.execute(command)
+            data = cursor.fetchall()
             logging.info(msg="receive data - {} from database".format(data))
             return data
         except Exception as ex:

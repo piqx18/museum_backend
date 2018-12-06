@@ -12,11 +12,6 @@ class Server(object):
         _auth = Auth().auth(data=data)
 
     @staticmethod
-    @post("/api/v1/getToken")
-    def get_token():
-        pass
-
-    @staticmethod
     def run(host="0.0.0.0", port=8080):
         run(host=host, port=port)
 

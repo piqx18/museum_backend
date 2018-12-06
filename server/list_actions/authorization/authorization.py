@@ -1,5 +1,5 @@
 
-from parsing.pasring_auth import Parsing
+from parsing.pasring_auth import Parsing, ParsingAnswer
 from creating_query.mysql_command import CreateCommand
 from mysql_.client_mysql import ClientMysql
 
@@ -28,10 +28,12 @@ class Auth(object):
         }
         """
         user = Parsing.pasring_user(data)
-        if self.check_user(user):
-            return 1
+
+        if len(self.check_user(user)) > 0:
+            # Подготовка положительного ответа
+            pass
 
     def check_user(self, user):
         query = CreateCommand.check_user(login=user.login, password=user.password)
-        result = self.client.request(command=query)
-        print(result)
+        result = ParsingAnswer.parsing_result(self.client.request_select(command=query))
+        return result

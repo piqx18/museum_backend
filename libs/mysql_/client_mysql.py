@@ -4,7 +4,7 @@ import logging
 
 class ClientMysql(object):
 
-    def __init__(self, host, port, user, passwd, database):
+    def __init__(self, host, port, user, passwd, database, charset):
         """
         :param host: host MySQL server
         :param port: port MySQL server
@@ -20,7 +20,8 @@ class ClientMysql(object):
                 port=port,
                 user=user,
                 passwd=passwd,
-                database=database
+                database=database,
+                charset=charset
             )
             logging.info(msg="Successful connect to database")
         except Exception as e:
@@ -31,9 +32,8 @@ class ClientMysql(object):
             logging.info(msg="Try {command} to database".format(command=command))
             cursor = self.db.cursor()
             cursor.execute("{}".format(command))
-            data = self.db.commit()
-            logging.info(msg="receive data - {} from database".format(data))
-            return data
+            self.db.commit()
+            return cursor.lastrowid
         except Exception as ex:
             logging.error(msg="error - {}".format(ex))
 

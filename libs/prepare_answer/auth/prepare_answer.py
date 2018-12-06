@@ -1,6 +1,6 @@
 
 
-class PrepareResult(object):
+class PrepareResultAuth(object):
 
     @staticmethod
     def prepare_answer_success(user, access=None):
@@ -10,11 +10,27 @@ class PrepareResult(object):
             "result": "successful",
             "data_auth":
                 {
+                    "user_id": user.user_id,
                     "login": user.login,
                     "password": user.password,
                     "token": "ROOT"
                 },
             "data_access": {}
+        }
+
+        return result
+
+    @staticmethod
+    def prepare_answer_access_denied(user):
+
+        result = {
+            "result": "error",
+            "message": "ACCESS DENIED",
+            "data_auth":
+                {
+                    "login": user.login,
+                    "password": user.password
+                }
         }
 
         return result

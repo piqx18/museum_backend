@@ -1,6 +1,7 @@
-
+# -*- coding: utf-8
 from bottle import *
 from museum_backend.server.list_actions.authorization.authorization import Auth
+from museum_backend.server.list_actions.users.Users import Users
 
 
 class Server(object):
@@ -10,6 +11,12 @@ class Server(object):
     def auth():
         data = request.body.read()
         return Auth().auth(data=data)
+
+    @staticmethod
+    @post("/api/v1/createuser")
+    def create_user():
+        data = request.body.read()
+        return Users().create_user(data=data)
 
     @staticmethod
     def run(host="0.0.0.0", port=8080):

@@ -2,6 +2,7 @@
 from parsing.pasring_auth import Parsing, ParsingAnswer
 from creating_query.mysql_command import CreateCommand
 from mysql_.client_mysql import ClientMysql
+from prepare_answer.auth.prepare_answer import PrepareResult
 
 
 class Auth(object):
@@ -29,9 +30,15 @@ class Auth(object):
         """
         user = Parsing.pasring_user(data)
 
-        if len(self.check_user(user)) > 0:
+        result = self.check_user(user=user)
+        if len(result) > 0:
+            answer = PrepareResult.prepare_answer_success(user=result)
+            return answer
             # Подготовка положительного ответа
-            pass
+        elif len(result) == 0:
+            # вернуть негативный ответ NOT FOUND
+            answer = PrepareResult.prepare_answer_not_found()
+            return answer
 
     def check_user(self, user):
         query = CreateCommand.check_user(login=user.login, password=user.password)

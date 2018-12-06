@@ -6,6 +6,7 @@ UserSpec = namedtuple("UserSpec", "login password")
 
 User = namedtuple("User", "id login password")
 
+
 class Parsing(object):
 
     @staticmethod

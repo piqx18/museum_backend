@@ -5,8 +5,24 @@ class PrepareResult(object):
     @staticmethod
     def prepare_answer_success(user, access=None):
 
-        result = dict()
+        user = user[0]
+        result = {
+            "result": "successful",
+            "data_auth":
+                {
+                    "login": user.login,
+                    "password": user.password,
+                    "token": "ROOT"
+                },
+            "data_access": {}
+        }
 
-        result.update({"result": "successful"})
-        result.update()
-        pass
+        return result
+
+    @staticmethod
+    def prepare_answer_not_found():
+        result = {
+            "result": "Error",
+            "message": "NOT_FOUND"
+        }
+        return result

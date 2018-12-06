@@ -9,7 +9,7 @@ class Server(object):
     @post("/api/v1/authorization")
     def auth():
         data = request.body.read()
-        _auth = Auth().auth(data=data)
+        return Auth().auth(data=data)
 
     @staticmethod
     def run(host="0.0.0.0", port=8080):

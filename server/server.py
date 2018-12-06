@@ -1,6 +1,6 @@
 
 from bottle import *
-from authorization.authorization import Auth
+from museum_backend.server.list_actions.authorization.authorization import Auth
 
 
 class Server(object):

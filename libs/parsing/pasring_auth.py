@@ -2,7 +2,7 @@
 from collections import namedtuple
 import json
 
-User = namedtuple("Users", "login password")
+UserSpec = namedtuple("Users", "login password")
 
 
 class Parsing(object):
@@ -14,4 +14,8 @@ class Parsing(object):
         login = data.get("login")
         password = data.get("password")
 
-        return User(login=login, password=password)
+        return UserSpec(login=login, password=password)
+
+
+class ParsingAnswer(object):
+    pass

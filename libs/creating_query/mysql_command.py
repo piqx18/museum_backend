@@ -1,4 +1,3 @@
-
 class CreateCommand(object):
 
     @staticmethod
@@ -14,12 +13,22 @@ class CreateCommand(object):
                             user_id=user_id)
         return command
 
-    # todo Дописать вставку в таблицы  rights
+    @staticmethod
+    def insert_rights(confirmed, allow_read, allow_write, allow_partial_edit, allow_edit, allow_manage, allow_print,
+                      blocked, user_id):
+        command = "INSERT INTO rights(user_id, confirmed, allow_read, allow_write, allow_partial_edit, allow_edit," \
+                  "allow_manage, allow_print, blocked) VALUES ( '{user_id}', '{confirmed}'," \
+                  " '{allow_read}', '{allow_write}', '{allow_partial_edit}', '{allow_edit}', '{allow_manage}', " \
+                  "'{allow_print}', " \
+                  "'{blocked}')".format(user_id=user_id, confirmed=confirmed, allow_read=allow_read,
+                                        allow_write=allow_write,
+                                        allow_partial_edit=allow_partial_edit, allow_edit=allow_edit,
+                                        allow_manage=allow_manage,
+                                        allow_print=allow_print, blocked=blocked)
+
+        return command
 
     @staticmethod
     def check_user(login):
         command = "SELECT * FROM users WHERE login='{}'".format(login)
         return command
-
-
-

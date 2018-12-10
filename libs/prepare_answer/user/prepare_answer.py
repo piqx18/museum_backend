@@ -17,3 +17,25 @@ class PrepareResultUser(object):
         }
 
         return result
+
+    @staticmethod
+    def prepare_answer_method_not_allowed():
+
+        result = {
+            "result": "error",
+            "message": "method not allowed"
+        }
+
+        return result
+
+    @staticmethod
+    def prepare_answer_successful(user):
+
+        result = {
+            "result": "successful",
+            "data_auth": {
+                "login": user.login
+            }
+        }
+
+        return result

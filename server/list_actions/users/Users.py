@@ -13,26 +13,31 @@ class Users(BasicClient):
     def create_user(self, data):
         data = json.loads(data)
 
-        # берем данные
-        data_auth = data["auth_data"]
-        data_user = data["user_data"]
-        data_rights = data["rights_data"]
+        if data["method"] == "addUser":
 
-        auth_spec = ParsingUser.pasring_user(data=data_auth)
-        user_spec = ParsingAccount.pasring_accounts(data=data_user)
-        rigts_spec = ParsingRights.parsing_rigths(data=data_rights)
+            # берем данные
+            data_auth = data["auth_data"]
+            data_user = data["user_data"]
+            data_rights = data["rights_data"]
 
-        # проверяем что пользователя с таким логином нет
-        result = self.check_exist_auth(auth_spec)
-        if len(result) > 0:
-            # возрвращаем ошибку, что пользователь с таким логином существует
-            return PrepareResultUser.prepare_answer_exist_user(result)
-        elif len(result) == 0:
-            # заводим пользователя
-            # 1. заводим запись в users
-            # 2. добавляем в таблицу права для этого пользователя и личную информацию, переданную в запросе
-            id_record = self.insert_users(auth_spec)
-            self.insert_account(user_spec=user_spec, _id=id_record)
+            auth_spec = ParsingUser.pasring_user(data=data_auth)
+            user_spec = ParsingAccount.pasring_accounts(data=data_user)
+            rights_spec = ParsingRights.parsing_rigths(data=data_rights)
+
+            # проверяем что пользователя с таким логином нет
+            result = self.check_exist_auth(auth_spec)
+            if len(result) > 0:
+                # возрвращаем ошибку, что пользователь с таким логином существует
+                return PrepareResultUser.prepare_answer_exist_user(result)
+            elif len(result) == 0:
+                # заводим пользователя
+                # 1. заводим запись в users
+                # 2. добавляем в таблицу права для этого пользователя и личную информацию, переданную в запросе
+                id_record = self.insert_users(auth_spec)
+                self.insert_account(user_spec=user_spec, _id=id_record)
+                self.insert_rights(right_spec=rights_spec, _id=id_record)
+        else:
+            return PrepareResultUser.prepare_answer_method_not_allowed()
 
     def insert_account(self, user_spec, _id):
         query = CreateCommand.insert_accounts(surname=user_spec.surname, patronymic=user_spec.partonymic,
@@ -41,7 +46,21 @@ class Users(BasicClient):
         self.client.request_insert(command=query)
 
     def insert_rights(self, right_spec, _id):
-        pass
+        # Bool -> int ( 1/0)
+        confirmed = int(right_spec.confirmed)
+        allow_read = int(right_spec.allow_read)
+        allow_write = int(right_spec.allow_write)
+        allow_edit = int(right_spec.allow_edit)
+        allow_partial_edit = int(right_spec.allow_partial_edit)
+        allow_manage = int(right_spec.allow_manage)
+        allow_print = int(right_spec.allow_print)
+        blocked = int(right_spec.blocked)
+        query = CreateCommand.insert_rights(confirmed=confirmed, allow_read=allow_read,
+                                            allow_write=allow_write, allow_edit=allow_edit,
+                                            allow_partial_edit=allow_partial_edit,
+                                            allow_manage=allow_manage, allow_print=allow_print,
+                                            blocked=blocked, user_id=_id)
+        self.client.request_insert(command=query)
 
     def insert_users(self, auth_data):
 

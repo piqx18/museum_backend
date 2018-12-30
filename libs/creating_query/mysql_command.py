@@ -29,6 +29,12 @@ class CreateCommand(object):
         return command
 
     @staticmethod
+    def request_rights(user_id):
+        command = "SELECT * FROM rights where user_id={}".format(user_id)
+
+        return command
+
+    @staticmethod
     def check_user(login):
         command = "SELECT * FROM users WHERE login='{}'".format(login)
         return command

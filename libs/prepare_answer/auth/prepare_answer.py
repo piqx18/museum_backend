@@ -15,7 +15,14 @@ class PrepareResultAuth(object):
                     "password": user.password,
                     "token": "ROOT"
                 },
-            "data_access": {}
+            "data_access": {
+                "allow_read": access.allow_read,
+                "allow_write": access.allow_write,
+                "allow_partial_edit": access.allow_partial_edit,
+                "allow_edit": access.allow_edit,
+                "allow_manage": access.allow_manage,
+                "allow_print": access.allow_print
+            }
         }
 
         return result

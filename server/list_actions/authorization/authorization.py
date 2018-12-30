@@ -1,5 +1,6 @@
 
 from parsing.pasring_users import ParsingUser, ParsingAnswerUser
+from parsing.parsing_rights import ParsingRightsAnswer
 from creating_query.mysql_command import CreateCommand
 from mysql_.client_mysql import ClientMysql
 from prepare_answer.auth.prepare_answer import PrepareResultAuth
@@ -25,7 +26,10 @@ class Auth(BasicClient):
         user = ParsingUser.pasring_user(data)
         result = self.check_user(user=user)
         if len(result) > 0 and result[0].password == user.password:
-            answer = PrepareResultAuth.prepare_answer_success(user=result)
+            # запрашиваем права пользователя
+            query = CreateCommand.request_rights(user_id=result[0].user_id)
+            rights = ParsingRightsAnswer.prepare_rights_answer(self.client.request_select(command=query))
+            answer = PrepareResultAuth.prepare_answer_success(user=result, access=rights)
             return answer
             # Подготовка положительного ответа
         elif len(result) == 0:

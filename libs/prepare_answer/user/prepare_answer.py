@@ -34,7 +34,8 @@ class PrepareResultUser(object):
         result = {
             "result": "successful",
             "data_auth": {
-                "login": user.login
+                "login": user.login,
+                "password": user.password
             }
         }
 

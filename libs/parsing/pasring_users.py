@@ -23,9 +23,6 @@ class ParsingAnswerUser(object):
     def parsing_result(data):
 
         assert isinstance(data, list)
+        user = data[0]
 
-        result_list = list()
-        for user in data:
-            result_list.append(User(user_id=user[0], login=user[1], password=user[2]))
-
-        return result_list
+        return User(user_id=user[0], login=user[1], password=user[2])

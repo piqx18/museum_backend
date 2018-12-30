@@ -25,9 +25,9 @@ class Auth(BasicClient):
         data = json.loads(data)
         user = ParsingUser.pasring_user(data)
         result = self.check_user(user=user)
-        if len(result) > 0 and result[0].password == user.password:
+        if len(result) > 0 and result.password == user.password:
             # запрашиваем права пользователя
-            query = CreateCommand.request_rights(user_id=result[0].user_id)
+            query = CreateCommand.request_rights(user_id=result.user_id)
             rights = ParsingRightsAnswer.prepare_rights_answer(self.client.request_select(command=query))
             answer = PrepareResultAuth.prepare_answer_success(user=result, access=rights)
             return answer

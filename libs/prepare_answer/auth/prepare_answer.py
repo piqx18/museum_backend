@@ -15,6 +15,7 @@ class PrepareResultAuth(object):
                     "password": user.password,
                     "token": "ROOT"
                 },
+            # todo добавить оставшиеся права
             "data_access": {
                 "allow_read": access.allow_read,
                 "allow_write": access.allow_write,

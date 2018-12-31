@@ -34,9 +34,27 @@ class Users(BasicClient):
             id_record = self.insert_users(auth_spec)
             self.insert_account(user_spec=user_spec, _id=id_record)
             self.insert_rights(right_spec=rights_spec, _id=id_record)
+            # todo добавить отправку почты с url для подтверждения
             return PrepareResultUser.prepare_answer_successful(user=auth_spec)
-        else:
-            return PrepareResultUser.prepare_answer_method_not_allowed()
+
+    def update_user(self, data):
+
+        data = json.loads(data)
+
+        # парсим пользователя и ищем если есть, отправляем NOT EXIST если не существует
+        auth_spec = ParsingUser.pasring_user(data=data["auth_data"])
+        user_spec = ParsingAccount.pasring_accounts(data=data["user_data"])
+        rights_spec = ParsingRights.parsing_rigths(data=data["rights_data"])
+
+        check_user = self.check_exist_auth(auth_spec)
+
+        if check_user is not None:
+            # если пользователь найден берем id по id обновляем 3 таблицы
+            # todo добавить обновление 3 таблиц
+            pass
+
+        elif check_user is None:
+            return PrepareResultUser.prepate_answer_not_exist_user(user=auth_spec)
 
     def insert_account(self, user_spec, _id):
         query = CreateCommand.insert_accounts(surname=user_spec.surname, patronymic=user_spec.partonymic,
@@ -45,7 +63,7 @@ class Users(BasicClient):
         self.client.request_insert(command=query)
 
     def insert_rights(self, right_spec, _id):
-        # Bool -> int ( 1/0)
+        # Bool -> int
         confirmed = int(right_spec.confirmed)
         allow_read = int(right_spec.allow_read)
         allow_write = int(right_spec.allow_write)
@@ -68,6 +86,10 @@ class Users(BasicClient):
 
     def check_exist_auth(self, auth_data):
         query = CreateCommand.check_user(login=auth_data.login)
-        result = ParsingAnswerUser.parsing_result(self.client.request_select(command=query))
 
-        return result
+        try:
+            result = ParsingAnswerUser.parsing_result(self.client.request_select(command=query))
+        except IndexError:
+            result = None
+        finally:
+            return result

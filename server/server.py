@@ -19,6 +19,13 @@ class Server(object):
         return Users().create_user(data=data)
 
     @staticmethod
+    @post("/api/v1/user/updateuser")
+    def update_user():
+        data = request.body.read()
+
+        return Users().update_user(data=data)
+
+    @staticmethod
     def run(host="0.0.0.0", port=8080):
         run(host=host, port=port)
 

@@ -5,7 +5,6 @@ class PrepareResultUser(object):
     @staticmethod
     def prepare_answer_exist_user(user):
 
-        user = user[0]
         result = {
             "result": "error",
             "message": "USER EXIST",
@@ -19,16 +18,6 @@ class PrepareResultUser(object):
         return result
 
     @staticmethod
-    def prepare_answer_method_not_allowed():
-
-        result = {
-            "result": "error",
-            "message": "method not allowed"
-        }
-
-        return result
-
-    @staticmethod
     def prepare_answer_successful(user):
 
         result = {
@@ -37,6 +26,21 @@ class PrepareResultUser(object):
                 "login": user.login,
                 "password": user.password
             }
+        }
+
+        return result
+
+    @staticmethod
+    def prepate_answer_not_exist_user(user):
+
+        result = {
+            "result": "error",
+            "message": "USER NOT EXIST",
+            "data_auth":
+                {
+                    "login": user.login,
+                    "password": user.password,
+                }
         }
 
         return result

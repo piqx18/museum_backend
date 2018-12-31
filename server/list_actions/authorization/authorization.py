@@ -10,6 +10,7 @@ import json
 class BasicClient(object):
 
     def __init__(self):
+        # todo вставить взятия из конфига
         self.client = ClientMysql(host="localhost", port=3306, database="museum", user="root", passwd="qwer",
                                   charset="utf8")
 
